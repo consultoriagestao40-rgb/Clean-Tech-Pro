@@ -1,13 +1,19 @@
 import { db } from "@/lib/db";
 import { products } from "@/lib/db/schema";
 import { Hero } from "@/components/ui/hero";
-import { ProductCard } from "@/components/ui/product-card";
+import { ProductCatalog } from "@/components/product-catalog";
 import { desc } from "drizzle-orm";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const allProducts = await db.select().from(products).orderBy(desc(products.name));
+  // Fetch products with their plans
+  const allProducts = await db.query.products.findMany({
+    with: {
+      rentalPlans: true
+    },
+    orderBy: [desc(products.name)],
+  });
 
   return (
     <main className="min-h-screen bg-gray-50 text-slate-900">
@@ -24,27 +30,9 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {allProducts.length > 0 ? (
-              allProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  category={product.category}
-                  description={product.shortDescription || ''}
-                  imageUrl={product.imageUrl || undefined}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <div className="rounded-lg border-2 border-dashed border-gray-300 p-12 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                  <span className="mt-2 block text-sm font-semibold text-gray-900">Nenhum equipamento cadastrado ainda.</span>
-                  <p className="mt-2 text-sm text-gray-500">Acesse o painel administrativo para adicionar produtos.</p>
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Interactive Catalog */}
+          <ProductCatalog products={allProducts} />
+
         </div>
       </section>
 
