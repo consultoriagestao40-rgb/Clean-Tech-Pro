@@ -6,9 +6,11 @@ import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditProductPage({ params }: { params: { id: string } }) {
+export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+
     const product = await db.query.products.findFirst({
-        where: eq(products.id, params.id),
+        where: eq(products.id, id),
         with: { rentalPlans: true }
     });
 
