@@ -2,13 +2,14 @@ import { db } from "@/lib/db";
 import { products } from "@/lib/db/schema";
 import { Hero } from "@/components/ui/hero";
 import { ProductCatalog } from "@/components/product-catalog";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Fetch products with their plans
   const allProducts = await db.query.products.findMany({
+    where: eq(products.active, true),
     with: {
       rentalPlans: true
     },
