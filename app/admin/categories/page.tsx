@@ -9,7 +9,8 @@ import { desc } from 'drizzle-orm';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminCategoriesPage() {
-    let allCategories = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let allCategories: any[] = [];
     try {
         allCategories = await db.select().from(categories).orderBy(desc(categories.name));
     } catch (e) {

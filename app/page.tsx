@@ -10,7 +10,8 @@ export const revalidate = 0;
 
 export default async function Home() {
   // Fetch active categories (safely)
-  let activeCategories = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let activeCategories: any[] = [];
   try {
     activeCategories = await db.query.categories.findMany({
       where: eq(categories.active, true),
@@ -21,7 +22,8 @@ export default async function Home() {
   }
 
   // Fetch products (safely)
-  let allProducts = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let allProducts: any[] = [];
   try {
     allProducts = await db.query.products.findMany({
       where: eq(products.active, true),
