@@ -45,7 +45,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             {/* Reuse Hero or simpler header? User wants "sub pagina". Let's use a simpler header. */}
             <div className="bg-slate-900 py-16">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 relative">
-                    <Link href="/" className="absolute left-6 top-0 text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
+                    <Link href="/#catalogo" className="absolute left-6 top-0 text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
                         <ArrowLeft size={20} />
                         Voltar
                     </Link>
