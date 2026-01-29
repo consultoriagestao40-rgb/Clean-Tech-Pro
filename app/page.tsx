@@ -9,20 +9,30 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  // Fetch active categories
-  const activeCategories = await db.query.categories.findMany({
-    where: eq(categories.active, true),
-    orderBy: [desc(categories.name)],
-  });
+  // Fetch active categories (safely)
+  let activeCategories = [];
+  try {
+    activeCategories = await db.query.categories.findMany({
+      where: eq(categories.active, true),
+      orderBy: [desc(categories.name)],
+    });
+  } catch (e) {
+    console.warn("DB not ready (categories), skipping fetch during build");
+  }
 
-  // Fetch products with their plans (active only)
-  const allProducts = await db.query.products.findMany({
-    where: eq(products.active, true),
-    with: {
-      rentalPlans: true
-    },
-    orderBy: [desc(products.name)],
-  });
+  // Fetch products (safely)
+  let allProducts = [];
+  try {
+    allProducts = await db.query.products.findMany({
+      where: eq(products.active, true),
+      with: {
+        rentalPlans: true
+      },
+      orderBy: [desc(products.name)],
+    });
+  } catch (e) {
+    console.warn("DB not ready (products), skipping fetch during build");
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 text-slate-900">

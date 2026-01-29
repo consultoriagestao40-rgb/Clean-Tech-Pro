@@ -9,7 +9,12 @@ import { desc } from 'drizzle-orm';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminCategoriesPage() {
-    const allCategories = await db.select().from(categories).orderBy(desc(categories.name));
+    let allCategories = [];
+    try {
+        allCategories = await db.select().from(categories).orderBy(desc(categories.name));
+    } catch (e) {
+        console.warn("Could not fetch categories", e);
+    }
 
     return (
         <div>
