@@ -1,7 +1,6 @@
 import { db } from "@/lib/db";
-import { products, categories } from "@/lib/db/schema";
+import { categories } from "@/lib/db/schema";
 import { Hero } from "@/components/ui/hero";
-import { ProductCatalog } from "@/components/product-catalog";
 import { CategoryGrid } from "@/components/category-grid";
 import { desc, eq } from "drizzle-orm";
 
@@ -21,21 +20,6 @@ export default async function Home() {
     console.warn("DB not ready (categories), skipping fetch during build");
   }
 
-  // Fetch products (safely)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let allProducts: any[] = [];
-  try {
-    allProducts = await db.query.products.findMany({
-      where: eq(products.active, true),
-      with: {
-        rentalPlans: true
-      },
-      orderBy: [desc(products.name)],
-    });
-  } catch (e) {
-    console.warn("DB not ready (products), skipping fetch during build");
-  }
-
   return (
     <main className="min-h-screen bg-gray-50 text-slate-900">
       <Hero />
@@ -43,21 +27,6 @@ export default async function Home() {
       <section id="catalogo" className="py-16 sm:py-24">
         {/* Category Grid */}
         <CategoryGrid categories={activeCategories} />
-
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-16">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Nossa Frota
-            </h2>
-            <p className="mt-2 text-lg leading-8 text-gray-600">
-              Equipamentos de alta performance revisados e prontos para operação.
-            </p>
-          </div>
-
-          {/* Interactive Catalog */}
-          <ProductCatalog products={allProducts} />
-
-        </div>
       </section>
 
       <section id="contato" className="bg-white py-24 sm:py-32">
@@ -82,6 +51,6 @@ export default async function Home() {
           <a href="/admin" className="text-xs text-slate-700 hover:text-slate-500">Admin</a>
         </div>
       </footer>
-    </main>
+    </main >
   );
 }
