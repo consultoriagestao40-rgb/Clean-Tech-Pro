@@ -29,6 +29,7 @@ export function ProductModal({ product, servicePlans = [], isOpen, onClose }: Pr
 
     // Default to 36 months, state management
     const [selectedTerm, setSelectedTerm] = useState(36);
+    const [selectedServicePlan, setSelectedServicePlan] = useState<ServicePlan | null>(null);
 
     // Find plan for selected term
     const currentPlan = sortedPlans.find(p => p.months === selectedTerm);
@@ -87,29 +88,40 @@ export function ProductModal({ product, servicePlans = [], isOpen, onClose }: Pr
                             <div className="mb-8">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Escolha seu Nível de Serviço</h3>
                                 <div className="space-y-4">
-                                    {servicePlans.map((plan) => (
-                                        <div
-                                            key={plan.id}
-                                            className={`relative p-4 rounded-xl border-2 transition-all ${plan.isPopular
-                                                ? 'border-blue-500 bg-blue-50/50 shadow-md ring-1 ring-blue-500/20'
-                                                : 'border-slate-100 bg-slate-50 hover:border-blue-200'
-                                                }`}
-                                        >
-                                            {plan.isPopular && (
-                                                <span className="absolute -top-3 right-4 bg-blue-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full shadow-sm">
-                                                    Mais Popular
-                                                </span>
-                                            )}
-                                            <div className="flex flex-col">
-                                                <h4 className={`text-base font-bold mb-1 ${plan.isPopular ? 'text-blue-700' : 'text-slate-700'}`}>
-                                                    {plan.name}
-                                                </h4>
-                                                <p className="text-sm text-slate-600">
-                                                    {plan.description}
-                                                </p>
+                                    {servicePlans.map((plan) => {
+                                        const isSelected = selectedServicePlan?.id === plan.id;
+                                        return (
+                                            <div
+                                                key={plan.id}
+                                                onClick={() => setSelectedServicePlan(plan)}
+                                                className={`relative p-4 rounded-xl border-2 transition-all cursor-pointer ${isSelected
+                                                    ? 'border-green-600 bg-green-50 ring-1 ring-green-600'
+                                                    : plan.isPopular
+                                                        ? 'border-blue-500 bg-blue-50/50 hover:border-blue-400'
+                                                        : 'border-slate-100 bg-slate-50 hover:border-blue-300'
+                                                    }`}
+                                            >
+                                                {plan.isPopular && !isSelected && (
+                                                    <span className="absolute -top-3 right-4 bg-blue-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full shadow-sm">
+                                                        Mais Popular
+                                                    </span>
+                                                )}
+                                                {isSelected && (
+                                                    <span className="absolute -top-3 right-4 bg-green-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                                                        <Check size={10} /> Selecionado
+                                                    </span>
+                                                )}
+                                                <div className="flex flex-col">
+                                                    <h4 className={`text-base font-bold mb-1 ${isSelected ? 'text-green-800' : plan.isPopular ? 'text-blue-700' : 'text-slate-700'}`}>
+                                                        {plan.name}
+                                                    </h4>
+                                                    <p className={`text-sm ${isSelected ? 'text-green-700' : 'text-slate-600'}`}>
+                                                        {plan.description}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -161,12 +173,27 @@ export function ProductModal({ product, servicePlans = [], isOpen, onClose }: Pr
                                     Manutenção Inclusa
                                 </div>
                                 <a
-                                    href={`https://wa.me/5541992938103?text=Olá, tenho interesse na máquina ${product.name} no plano de ${selectedTerm} meses.`}
+                                    href={
+                                        selectedServicePlan
+                                            ? `https://wa.me/5541992938103?text=${encodeURIComponent(
+                                                `Gostaria de saber mais sobre a locação dá: ${product.name}.\nPlano: ${selectedServicePlan.name}\n${selectedServicePlan.description}\n\nPara: ${selectedTerm} meses de locação.`
+                                            )}`
+                                            : "#"
+                                    }
+                                    onClick={(e) => {
+                                        if (!selectedServicePlan) {
+                                            e.preventDefault();
+                                            alert("Por favor, selecione um Nível de Serviço (Ouro, Prata, etc) antes de solicitar a proposta.");
+                                        }
+                                    }}
                                     target="_blank"
-                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 shadow-lg shadow-green-600/20 transition-all transform hover:-translate-y-0.5"
+                                    className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold shadow-lg transition-all transform hover:-translate-y-0.5 ${selectedServicePlan
+                                        ? "bg-green-600 text-white hover:bg-green-500 shadow-green-600/20"
+                                        : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
+                                        }`}
                                 >
                                     <MessageCircle size={20} />
-                                    Solicitar Proposta
+                                    {selectedServicePlan ? "Solicitar Proposta" : "Selecione um Plano"}
                                 </a>
                             </div>
                         </div>
