@@ -4,9 +4,15 @@ import { categories } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export default async function NewProductPage() {
-    const activeCategories = await db.query.categories.findMany({
-        where: eq(categories.active, true)
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let activeCategories: any[] = [];
+    try {
+        activeCategories = await db.query.categories.findMany({
+            where: eq(categories.active, true)
+        });
+    } catch (e) {
+        console.warn("DB not ready (categories), skipping fetch during build");
+    }
 
     return (
         <div className="max-w-2xl mx-auto">

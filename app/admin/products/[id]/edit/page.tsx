@@ -19,9 +19,15 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     }
 
     // Fetch categories for dropdown
-    const activeCategories = await db.query.categories.findMany({
-        where: eq(categories.active, true)
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let activeCategories: any[] = [];
+    try {
+        activeCategories = await db.query.categories.findMany({
+            where: eq(categories.active, true)
+        });
+    } catch (e) {
+        console.warn("DB not ready (categories), skipping fetch during build");
+    }
 
     // Determine default category ID (use relation OR fallback to name matching)
     let defaultCategoryId = product.categoryId;

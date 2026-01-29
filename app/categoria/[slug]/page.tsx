@@ -13,9 +13,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     const { slug } = await params;
 
     // Fetch Category
-    const category = await db.query.categories.findFirst({
-        where: eq(categories.slug, slug)
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let category: any = null;
+    try {
+        category = await db.query.categories.findFirst({
+            where: eq(categories.slug, slug)
+        });
+    } catch (e) {
+        console.warn("DB not ready (category detail), returning 404");
+    }
 
     if (!category) {
         notFound();
