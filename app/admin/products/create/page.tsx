@@ -1,4 +1,4 @@
-// import { createProduct } from "@/app/actions/product-actions";
+import { createProduct } from "@/app/actions/product-actions";
 
 export default function NewProductPage() {
     return (
@@ -8,7 +8,7 @@ export default function NewProductPage() {
                 <p className="text-gray-500">Cadastre uma nova máquina no catálogo.</p>
             </div>
 
-            <form className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <form action={createProduct} className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
 
                 {/* Basic Info */}
                 <div className="space-y-4">
