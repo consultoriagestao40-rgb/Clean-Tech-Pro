@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Footer } from '@/components/ui/footer';
+import { FounderImage } from '@/components/ui/founder-image';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,17 +26,7 @@ export default function AboutPage() {
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                         {/* Placeholder for Image - User can replace src later or provide valid URL */}
                         <div className="mb-8 rounded-xl overflow-hidden bg-gray-100 aspect-video relative">
-                            {/* Attempting to use the image user hinted at, or a solid fallback if it fails */}
-                            <img
-                                src="https://cleantechpro.com.br/wp-content/uploads/2024/08/jose-vanderlei.jpg"
-                                alt="Jose Vanderlei Santos"
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                    e.currentTarget.style.display = 'none';
-                                    e.currentTarget.parentElement!.innerText = 'Foto do Fundador (Adicione aqui)';
-                                    e.currentTarget.parentElement!.className += ' flex items-center justify-center text-gray-400 font-medium';
-                                }}
-                            />
+                            <FounderImage />
                         </div>
 
                         <div className="space-y-6 text-lg leading-8 text-gray-600">
