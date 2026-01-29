@@ -5,7 +5,7 @@ export function Hero() {
     return (
         <div className="relative overflow-hidden bg-slate-900 py-24 sm:py-32">
             {/* Background gradient/image placeholder */}
-            <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center" />
+            <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.tennantco.com/services/product/image.tennant-br.M-T16AMR.thumbnail-3')] bg-cover bg-center" />
             <div className="absolute inset-0 z-0 bg-gradient-to-b from-slate-900/10 to-slate-900" />
 
             <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
