@@ -28,8 +28,8 @@ export default async function AboutPage() {
             <div className="flex-grow py-16 sm:py-24">
                 <div className="mx-auto max-w-3xl px-6 lg:px-8">
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                        {/* Placeholder for Image - User can replace src later or provide valid URL */}
-                        <div className="mb-8 rounded-xl overflow-hidden bg-gray-100 aspect-video relative">
+                        {/* Image Container - Flexible height to prevent cropping */}
+                        <div className="mb-8 flex justify-center">
                             <FounderImage initialUrl={imageUrl} />
                         </div>
 

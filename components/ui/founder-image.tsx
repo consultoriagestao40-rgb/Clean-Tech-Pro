@@ -20,7 +20,7 @@ export function FounderImage({ initialUrl }: { initialUrl?: string | null }) {
         <img
             src={src}
             alt="Jose Vanderlei Santos"
-            className="w-full h-full object-cover"
+            className="max-w-full h-auto max-h-[600px] rounded-xl object-contain shadow-sm"
             onError={() => setError(true)}
         />
     );
