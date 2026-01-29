@@ -5,6 +5,7 @@ import { ProductCatalog } from "@/components/product-catalog";
 import { desc, eq } from "drizzle-orm";
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function Home() {
   // Fetch products with their plans

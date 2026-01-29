@@ -18,8 +18,8 @@ export function ProductCatalog({ products }: { products: ProductWithPlans[] }) {
     return (
         <>
             <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                {products.length > 0 ? (
-                    products.map((product) => (
+                {products.filter(p => p.active !== false).length > 0 ? (
+                    products.filter(p => p.active !== false).map((product) => (
                         <div key={product.id} onClick={() => setSelectedProduct(product)} className="cursor-pointer">
                             <ProductCard
                                 id={product.id}
