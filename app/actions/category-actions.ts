@@ -10,13 +10,22 @@ export async function createCategory(formData: FormData) {
     const name = formData.get('name') as string;
     const imageUrl = formData.get('imageUrl') as string;
     // Generate slug from name
-    const slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    let slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+
+    // Check availability
+    const existing = await db.query.categories.findFirst({
+        where: eq(categories.slug, slug)
+    });
+
+    if (existing) {
+        slug = `${slug}-${Math.floor(Math.random() * 1000)}`;
+    }
 
     try {
         await db.insert(categories).values({
             name,
             slug,
-            imageUrl,
+            imageUrl: imageUrl || null,
             active: true,
         });
 
