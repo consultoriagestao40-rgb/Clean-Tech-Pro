@@ -13,34 +13,38 @@ export async function createProduct(formData: FormData) {
     const fullDescription = formData.get('fullDescription') as string;
     const imageUrl = formData.get('imageUrl') as string;
 
-    // Insert Product
-    const [newProduct] = await db.insert(products).values({
-        name,
-        category,
-        shortDescription,
-        fullDescription,
-        imageUrl,
-        active: true,
-    }).returning();
+    try {
+        // Insert Product
+        const [newProduct] = await db.insert(products).values({
+            name,
+            category,
+            shortDescription,
+            fullDescription,
+            imageUrl,
+            active: true,
+        }).returning();
 
-    // Handle Plans
-    // We expect inputs like plan_12, plan_24, etc.
-    const plans = [12, 24, 36, 48, 60];
-
-    for (const months of plans) {
-        const priceStr = formData.get(`plan_${months}`) as string;
-        if (priceStr) {
-            await db.insert(rentalPlans).values({
-                productId: newProduct.id,
-                months: months,
-                monthlyPrice: priceStr.toString(), // Drizzle handles decimal as string/number
-                includesMaintenance: true,
-            });
+        // Handle Plans
+        const plans = [12, 24, 36, 48, 60];
+        for (const months of plans) {
+            const priceStr = formData.get(`plan_${months}`) as string;
+            if (priceStr) {
+                await db.insert(rentalPlans).values({
+                    productId: newProduct.id,
+                    months: months,
+                    monthlyPrice: priceStr.toString(),
+                    includesMaintenance: true,
+                });
+            }
         }
+
+        revalidatePath('/');
+        revalidatePath('/admin/products');
+    } catch (error) {
+        console.error("❌ FALHA AO CRIAR PRODUTO:", error);
+        throw error; // Re-throw to ensure Vercel logs it as an error
     }
 
-    revalidatePath('/');
-    revalidatePath('/admin/products');
     redirect('/admin/products');
 }
 
@@ -50,4 +54,48 @@ export async function deleteProduct(formData: FormData) {
 
     revalidatePath('/');
     revalidatePath('/admin/products');
+}
+
+export async function updateProduct(formData: FormData) {
+    const id = formData.get('id') as string;
+    const name = formData.get('name') as string;
+    const category = formData.get('category') as string;
+    const shortDescription = formData.get('shortDescription') as string;
+    const fullDescription = formData.get('fullDescription') as string;
+    const imageUrl = formData.get('imageUrl') as string;
+
+    try {
+        // Update Product
+        await db.update(products).set({
+            name,
+            category,
+            shortDescription,
+            fullDescription,
+            imageUrl,
+        }).where(eq(products.id, id));
+
+        // Replace Plans (Delete all and re-create)
+        await db.delete(rentalPlans).where(eq(rentalPlans.productId, id));
+
+        const plans = [12, 24, 36, 48, 60];
+        for (const months of plans) {
+            const priceStr = formData.get(`plan_${months}`) as string;
+            if (priceStr) {
+                await db.insert(rentalPlans).values({
+                    productId: id,
+                    months: months,
+                    monthlyPrice: priceStr.toString(),
+                    includesMaintenance: true,
+                });
+            }
+        }
+
+        revalidatePath('/');
+        revalidatePath('/admin/products');
+    } catch (error) {
+        console.error("❌ FALHA AO ATUALIZAR PRODUTO:", error);
+        throw error;
+    }
+
+    redirect('/admin/products');
 }
