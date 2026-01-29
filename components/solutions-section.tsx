@@ -30,7 +30,7 @@ export function SolutionsSection() {
                                     rel="noopener noreferrer"
                                     className="rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-blue-600 shadow-sm hover:bg-blue-50 hover:scale-105 transition-all duration-300"
                                 >
-                                    Falar com Especialista
+                                    Falar com um Especialista
                                 </a>
                             </div>
                         </div>
