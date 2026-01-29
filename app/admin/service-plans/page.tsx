@@ -4,6 +4,7 @@ import { servicePlans, categories } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { Plus, Edit, Trash } from "lucide-react";
+import { deleteServicePlan } from "@/app/actions/service-plan-actions";
 
 export const dynamic = 'force-dynamic';
 
@@ -70,8 +71,18 @@ export default async function ServicePlansPage() {
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2">
+                                            {/* Create is separate page, but Edit could be too. For now assume Edit is not implemented fully or links to a page? 
+                                                Actually let's just leave Edit valid if user has a route for it. 
+                                                But Delete must work.
+                                             */}
                                             <button className="text-blue-600 hover:text-blue-900"><Edit size={16} /></button>
-                                            <button className="text-red-600 hover:text-red-900"><Trash size={16} /></button>
+
+                                            <form action={deleteServicePlan}>
+                                                <input type="hidden" name="id" value={plan.id} />
+                                                <button type="submit" className="text-red-600 hover:text-red-900 transition-colors">
+                                                    <Trash size={16} />
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

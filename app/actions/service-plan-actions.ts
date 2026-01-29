@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { servicePlans } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
 
 export async function createServicePlan(formData: FormData) {
     const name = formData.get("name") as string;
@@ -35,4 +36,19 @@ export async function createServicePlan(formData: FormData) {
     revalidatePath('/admin/service-plans');
     revalidatePath(`/categoria`); // Revalidate all categories since they might show this plan
     redirect('/admin/service-plans');
+}
+
+export async function deleteServicePlan(formData: FormData) {
+    const id = formData.get("id") as string;
+    if (!id) return;
+
+    try {
+        await db.delete(servicePlans).where(eq(servicePlans.id, id));
+        revalidatePath('/admin/service-plans');
+        revalidatePath(`/categoria`);
+    } catch (e) {
+        console.error("Failed to delete plan:", e);
+        // We can't easily show a toast from a server action without a client component wrapper,
+        // but for now this will at least work.
+    }
 }
