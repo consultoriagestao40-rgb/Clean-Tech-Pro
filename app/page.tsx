@@ -41,7 +41,7 @@ export default async function Home() {
               Não sabe qual máquina é ideal para sua operação? Nossa equipe técnica analisa sua necessidade.
             </p>
             <div className="mt-10 flex items-center gap-x-6">
-              <a href="https://wa.me/5541999999999" target="_blank" className="rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+              <a href="https://wa.me/5541992938103" target="_blank" className="rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
                 Chamar no WhatsApp
               </a>
             </div>

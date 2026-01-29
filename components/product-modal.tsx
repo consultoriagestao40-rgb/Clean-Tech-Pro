@@ -85,8 +85,8 @@ export function ProductModal({ product, servicePlans = [], isOpen, onClose }: Pr
                                         <div
                                             key={plan.id}
                                             className={`relative p-4 rounded-xl border-2 transition-all ${plan.isPopular
-                                                    ? 'border-blue-500 bg-blue-50/50 shadow-md ring-1 ring-blue-500/20'
-                                                    : 'border-slate-100 bg-slate-50 hover:border-blue-200'
+                                                ? 'border-blue-500 bg-blue-50/50 shadow-md ring-1 ring-blue-500/20'
+                                                : 'border-slate-100 bg-slate-50 hover:border-blue-200'
                                                 }`}
                                         >
                                             {plan.isPopular && (
@@ -135,7 +135,7 @@ export function ProductModal({ product, servicePlans = [], isOpen, onClose }: Pr
                                     Manutenção Inclusa
                                 </div>
                                 <a
-                                    href={`https://wa.me/5541999999999?text=Olá, tenho interesse na máquina ${product.name}.`}
+                                    href={`https://wa.me/5541992938103?text=Olá, tenho interesse na máquina ${product.name}.`}
                                     target="_blank"
                                     className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 shadow-lg shadow-green-600/20 transition-all transform hover:-translate-y-0.5"
                                 >
