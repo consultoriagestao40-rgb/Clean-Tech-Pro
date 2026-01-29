@@ -4,9 +4,13 @@ import { ArrowLeft } from 'lucide-react';
 import { Footer } from '@/components/ui/footer';
 import { FounderImage } from '@/components/ui/founder-image';
 
+import { getSetting } from '@/app/actions/settings-actions';
+
 export const dynamic = 'force-dynamic';
 
-export default function AboutPage() {
+export default async function AboutPage() {
+    const imageUrl = await getSetting('about_image_url');
+
     return (
         <main className="min-h-screen bg-gray-50 text-slate-900 flex flex-col">
             <div className="bg-slate-900 py-12">
@@ -26,7 +30,7 @@ export default function AboutPage() {
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                         {/* Placeholder for Image - User can replace src later or provide valid URL */}
                         <div className="mb-8 rounded-xl overflow-hidden bg-gray-100 aspect-video relative">
-                            <FounderImage />
+                            <FounderImage initialUrl={imageUrl} />
                         </div>
 
                         <div className="space-y-6 text-lg leading-8 text-gray-600">

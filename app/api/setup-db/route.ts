@@ -14,6 +14,11 @@ export async function GET() {
                 "image_url" text,
                 "active" boolean DEFAULT true NOT NULL
             );
+            
+            CREATE TABLE IF NOT EXISTS "settings" (
+                "key" text PRIMARY KEY,
+                "value" text NOT NULL
+            );
         `);
 
         // Add category_id to products if not exists

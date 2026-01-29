@@ -41,6 +41,11 @@ export const rentalPlans = pgTable('rental_plans', {
     includesMaintenance: boolean('includes_maintenance').default(true).notNull(),
 });
 
+export const settings = pgTable('settings', {
+    key: text('key').primaryKey(),
+    value: text('value').notNull(),
+});
+
 export const rentalPlansRelations = relations(rentalPlans, ({ one }) => ({
     product: one(products, {
         fields: [rentalPlans.productId],

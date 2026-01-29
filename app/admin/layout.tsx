@@ -23,7 +23,7 @@ export default function AdminLayout({
                         <span className="font-medium">Produtos</span>
                     </Link>
                     <Link href="/admin/categories" className="flex items-center gap-3 px-3 py-2 text-gray-700 rounded-md hover:bg-blue-50 hover:text-blue-700 group">
-                        <LayoutDashboard size={20} />
+                        <Grid size={20} />
                         <span className="font-medium">Categorias</span>
                     </Link>
                     <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2 text-gray-700 rounded-md hover:bg-blue-50 hover:text-blue-700 group">
