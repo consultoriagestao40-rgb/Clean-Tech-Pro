@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { products, rentalPlans, categories } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +46,10 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
     return (
         <div className="max-w-2xl mx-auto">
+            <Link href="/admin/products" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+                <ArrowLeft size={16} />
+                Voltar para lista
+            </Link>
             <div className="mb-8">
                 <h1 className="text-2xl font-bold text-gray-900">Editar Produto</h1>
                 <p className="text-gray-500">Atualize as informações do equipamento.</p>

@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { ProductCatalog } from "@/components/product-catalog";
 import { Hero } from "@/components/ui/hero";
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -42,8 +44,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         <main className="min-h-screen bg-gray-50 text-slate-900">
             {/* Reuse Hero or simpler header? User wants "sub pagina". Let's use a simpler header. */}
             <div className="bg-slate-900 py-16">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                    <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{category.name}</h1>
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 relative">
+                    <Link href="/" className="absolute left-6 top-0 text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
+                        <ArrowLeft size={20} />
+                        Voltar
+                    </Link>
+                    <div className="text-center mt-8 sm:mt-0">
+                        <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{category.name}</h1>
+                    </div>
                 </div>
             </div>
 

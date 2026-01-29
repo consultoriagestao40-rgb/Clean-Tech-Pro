@@ -2,6 +2,8 @@ import { createProduct } from "@/app/actions/product-actions";
 import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default async function NewProductPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,6 +18,10 @@ export default async function NewProductPage() {
 
     return (
         <div className="max-w-2xl mx-auto">
+            <Link href="/admin/products" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+                <ArrowLeft size={16} />
+                Voltar para lista
+            </Link>
             <div className="mb-8">
                 <h1 className="text-2xl font-bold text-gray-900">Novo Produto</h1>
                 <p className="text-gray-500">Cadastre uma nova máquina no catálogo.</p>
