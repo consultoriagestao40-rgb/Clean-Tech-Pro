@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema";
 import { Hero } from "@/components/ui/hero";
 import { CategoryGrid } from "@/components/category-grid";
+import { Footer } from "@/components/ui/footer";
 import { desc, eq } from "drizzle-orm";
 
 export const dynamic = 'force-dynamic';
@@ -45,12 +46,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <footer className="bg-slate-900 py-12 text-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex justify-between items-center">
-          <p className="text-sm text-gray-400">© 2026 Clean Tech Pro. Todos os direitos reservados.</p>
-          <a href="/admin" className="text-xs text-slate-700 hover:text-slate-500">Admin</a>
-        </div>
-      </footer>
+      <Footer />
     </main >
   );
 }
