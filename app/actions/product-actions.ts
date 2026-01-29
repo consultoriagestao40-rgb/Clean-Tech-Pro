@@ -99,3 +99,20 @@ export async function updateProduct(formData: FormData) {
 
     redirect('/admin/products');
 }
+
+export async function toggleProductStatus(formData: FormData) {
+    const id = formData.get('id') as string;
+    const currentStatus = formData.get('currentStatus') === 'true';
+
+    try {
+        await db.update(products)
+            .set({ active: !currentStatus })
+            .where(eq(products.id, id));
+
+        revalidatePath('/');
+        revalidatePath('/admin/products');
+    } catch (error) {
+        console.error("❌ FALHA AO ALTERAR STATUS:", error);
+        throw error;
+    }
+}

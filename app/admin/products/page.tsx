@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { Plus, Trash2 } from 'lucide-react';
 import { db } from "@/lib/db";
 import { products } from "@/lib/db/schema";
-import { Plus } from 'lucide-react';
+import { deleteProduct, toggleProductStatus } from "@/app/actions/product-actions";
 import { desc } from 'drizzle-orm';
 
 export const dynamic = 'force-dynamic';
@@ -40,10 +41,25 @@ export default async function AdminProductsPage() {
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {product.active ? 'Ativo' : 'Inativo'}
+                                    <form action={toggleProductStatus}>
+                                        <input type="hidden" name="id" value={product.id} />
+                                        <input type="hidden" name="currentStatus" value={String(product.active)} />
+                                        <button type="submit" className={`flex items-center gap-1 font-medium ${product.active ? 'text-green-600 hover:text-green-800' : 'text-gray-400 hover:text-gray-600'}`}>
+                                            {product.active ? 'Ativo' : 'Inativo'}
+                                        </button>
+                                    </form>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link href={`/admin/products/${product.id}/edit`} className="text-indigo-600 hover:text-indigo-900">Editar</Link>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end gap-3 items-center">
+                                    <Link href={`/admin/products/${product.id}/edit`} className="text-indigo-600 hover:text-indigo-900" title="Editar">
+                                        <Trash2 size={1} className="hidden" /> {/* Hack to keep layout valid if icons fail */}
+                                        Editar
+                                    </Link>
+                                    <form action={deleteProduct}>
+                                        <input type="hidden" name="id" value={product.id} />
+                                        <button type="submit" className="text-red-600 hover:text-red-900" title="Excluir">
+                                            Excluir
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         ))}
