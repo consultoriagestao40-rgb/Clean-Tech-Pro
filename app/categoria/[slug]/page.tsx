@@ -40,10 +40,16 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     });
 
     // Fetch Service Plans for this Category
-    const plans = await db.query.servicePlans.findMany({
-        where: eq(servicePlans.categoryId, category.id),
-        orderBy: [asc(servicePlans.order)]
-    });
+    let plans: any[] = [];
+    try {
+        plans = await db.query.servicePlans.findMany({
+            where: eq(servicePlans.categoryId, category.id),
+            orderBy: [asc(servicePlans.order)]
+        });
+    } catch (e) {
+        console.warn("Could not fetch service plans (migration might be missing):", e);
+        // Fallback to empty plans to keep page working
+    }
 
     return (
         <main className="min-h-screen bg-gray-50 text-slate-900">
