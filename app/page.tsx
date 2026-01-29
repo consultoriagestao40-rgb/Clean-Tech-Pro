@@ -1,14 +1,21 @@
 import { db } from "@/lib/db";
-import { products } from "@/lib/db/schema";
+import { products, categories } from "@/lib/db/schema";
 import { Hero } from "@/components/ui/hero";
 import { ProductCatalog } from "@/components/product-catalog";
+import { CategoryGrid } from "@/components/category-grid";
 import { desc, eq } from "drizzle-orm";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  // Fetch products with their plans
+  // Fetch active categories
+  const activeCategories = await db.query.categories.findMany({
+    where: eq(categories.active, true),
+    orderBy: [desc(categories.name)],
+  });
+
+  // Fetch products with their plans (active only)
   const allProducts = await db.query.products.findMany({
     where: eq(products.active, true),
     with: {
@@ -22,7 +29,10 @@ export default async function Home() {
       <Hero />
 
       <section id="catalogo" className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Category Grid */}
+        <CategoryGrid categories={activeCategories} />
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
               Nossa Frota

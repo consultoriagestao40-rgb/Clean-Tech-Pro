@@ -1,6 +1,6 @@
 import { updateProduct } from "@/app/actions/product-actions";
 import { db } from "@/lib/db";
-import { products, rentalPlans } from "@/lib/db/schema";
+import { products, rentalPlans, categories } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
@@ -16,6 +16,18 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
     if (!product) {
         notFound();
+    }
+
+    // Fetch categories for dropdown
+    const activeCategories = await db.query.categories.findMany({
+        where: eq(categories.active, true)
+    });
+
+    // Determine default category ID (use relation OR fallback to name matching)
+    let defaultCategoryId = product.categoryId;
+    if (!defaultCategoryId && product.category) {
+        const matched = activeCategories.find(c => c.name === product.category);
+        if (matched) defaultCategoryId = matched.id;
     }
 
     // Transform plans into a map for easier access
@@ -50,14 +62,14 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Categoria</label>
                         <select
-                            name="category"
-                            defaultValue={product.category}
+                            name="categoryId" // Changed from 'category'
+                            defaultValue={defaultCategoryId || ''}
                             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         >
-                            <option value="Lavadoras de Piso">Lavadoras de Piso</option>
-                            <option value="Varredeiras">Varredeiras</option>
-                            <option value="Polidoras">Polidoras</option>
-                            <option value="Outros">Outros</option>
+                            <option value="">Selecione uma categoria...</option>
+                            {activeCategories.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
                         </select>
                     </div>
 

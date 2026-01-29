@@ -1,14 +1,24 @@
 'use server';
 
 import { db } from "@/lib/db";
-import { products, rentalPlans } from "@/lib/db/schema";
+import { products, rentalPlans, categories } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 
 export async function createProduct(formData: FormData) {
     const name = formData.get('name') as string;
-    const category = formData.get('category') as string;
+    // const category = formData.get('category') as string; // Legacy
+    const categoryId = formData.get('categoryId') as string;
+    let categoryName = 'Outros';
+
+    if (categoryId) {
+        const cat = await db.query.categories.findFirst({
+            where: eq(categories.id, categoryId)
+        });
+        if (cat) categoryName = cat.name;
+    }
+
     const shortDescription = formData.get('shortDescription') as string;
     const fullDescription = formData.get('fullDescription') as string;
     const imageUrl = formData.get('imageUrl') as string;
@@ -17,7 +27,8 @@ export async function createProduct(formData: FormData) {
         // Insert Product
         const [newProduct] = await db.insert(products).values({
             name,
-            category,
+            category: categoryName, // Fallback legacy
+            categoryId: categoryId || null,
             shortDescription,
             fullDescription,
             imageUrl,
@@ -59,7 +70,17 @@ export async function deleteProduct(formData: FormData) {
 export async function updateProduct(formData: FormData) {
     const id = formData.get('id') as string;
     const name = formData.get('name') as string;
-    const category = formData.get('category') as string;
+    // const category = formData.get('category') as string;
+    const categoryId = formData.get('categoryId') as string;
+    let categoryName = 'Outros';
+
+    if (categoryId) {
+        const cat = await db.query.categories.findFirst({
+            where: eq(categories.id, categoryId)
+        });
+        if (cat) categoryName = cat.name;
+    }
+
     const shortDescription = formData.get('shortDescription') as string;
     const fullDescription = formData.get('fullDescription') as string;
     const imageUrl = formData.get('imageUrl') as string;
@@ -68,7 +89,8 @@ export async function updateProduct(formData: FormData) {
         // Update Product
         await db.update(products).set({
             name,
-            category,
+            category: categoryName,
+            categoryId: categoryId || null,
             shortDescription,
             fullDescription,
             imageUrl,

@@ -1,6 +1,13 @@
 import { createProduct } from "@/app/actions/product-actions";
+import { db } from "@/lib/db";
+import { categories } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
-export default function NewProductPage() {
+export default async function NewProductPage() {
+    const activeCategories = await db.query.categories.findMany({
+        where: eq(categories.active, true)
+    });
+
     return (
         <div className="max-w-2xl mx-auto">
             <div className="mb-8">
@@ -19,11 +26,11 @@ export default function NewProductPage() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Categoria</label>
-                        <select name="category" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            <option value="Lavadoras de Piso">Lavadoras de Piso</option>
-                            <option value="Varredeiras">Varredeiras</option>
-                            <option value="Polidoras">Polidoras</option>
-                            <option value="Outros">Outros</option>
+                        <select name="categoryId" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="">Selecione uma categoria...</option>
+                            {activeCategories.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
                         </select>
                     </div>
 
