@@ -14,7 +14,7 @@ export default async function AdminProductsPage() {
         <div>
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Produtos</h1>
-                <Link href="/admin/products/new" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2">
+                <Link href="/admin/products/create" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2">
                     <Plus size={18} /> Novo Produto
                 </Link>
             </div>
