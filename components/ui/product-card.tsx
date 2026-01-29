@@ -12,12 +12,12 @@ interface ProductCardProps {
 export function ProductCard({ name, category, imageUrl, description }: ProductCardProps) {
     return (
         <div className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
-            <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
+            <div className="aspect-[4/3] bg-white relative overflow-hidden">
                 {imageUrl ? (
                     <img
                         src={imageUrl}
                         alt={name}
-                        className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full object-contain object-center p-4 transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
                     <div className="flex h-full items-center justify-center text-gray-400">
