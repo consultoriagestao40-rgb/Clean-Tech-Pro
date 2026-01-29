@@ -16,13 +16,21 @@ export async function createServicePlan(formData: FormData) {
         throw new Error("Missing required fields");
     }
 
-    await db.insert(servicePlans).values({
-        name,
-        categoryId,
-        description,
-        isPopular,
-        order,
-    });
+    try {
+        await db.insert(servicePlans).values({
+            name,
+            categoryId,
+            description,
+            isPopular,
+            order,
+        });
+    } catch (e: any) {
+        console.error("Failed to create service plan:", e);
+        if (e.message?.includes("relation") && e.message?.includes("does not exist")) {
+            throw new Error("A tabela de planos não existe. Por favor, acesse /api/setup-db para criá-la.");
+        }
+        throw new Error("Erro ao salvar plano: " + e.message);
+    }
 
     revalidatePath('/admin/service-plans');
     revalidatePath(`/categoria`); // Revalidate all categories since they might show this plan
