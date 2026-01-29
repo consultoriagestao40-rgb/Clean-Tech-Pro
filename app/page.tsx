@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema";
 import { Hero } from "@/components/ui/hero";
 import { CategoryGrid } from "@/components/category-grid";
+import { SolutionsSection } from "@/components/solutions-section";
 import { Footer } from "@/components/ui/footer";
 import { desc, eq } from "drizzle-orm";
 
@@ -29,6 +30,8 @@ export default async function Home() {
         {/* Category Grid */}
         <CategoryGrid categories={activeCategories} />
       </section>
+
+      <SolutionsSection />
 
       <section id="contato" className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
