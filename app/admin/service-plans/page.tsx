@@ -75,7 +75,10 @@ export default async function ServicePlansPage() {
                                                 Actually let's just leave Edit valid if user has a route for it. 
                                                 But Delete must work.
                                              */}
-                                            <button className="text-blue-600 hover:text-blue-900"><Edit size={16} /></button>
+                                            {/* Edit Button */}
+                                            <Link href={`/admin/service-plans/${plan.id}/edit`} className="text-blue-600 hover:text-blue-900">
+                                                <Edit size={16} />
+                                            </Link>
 
                                             <form action={deleteServicePlan}>
                                                 <input type="hidden" name="id" value={plan.id} />

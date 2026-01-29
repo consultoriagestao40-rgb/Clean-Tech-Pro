@@ -52,3 +52,35 @@ export async function deleteServicePlan(formData: FormData) {
         // but for now this will at least work.
     }
 }
+
+export async function updateServicePlan(formData: FormData) {
+    const id = formData.get("id") as string;
+    const name = formData.get("name") as string;
+    const categoryId = formData.get("categoryId") as string;
+    const description = formData.get("description") as string;
+    const isPopular = formData.get("isPopular") === "on";
+    const order = parseInt(formData.get("order") as string) || 0;
+
+    if (!id || !name || !categoryId || !description) {
+        throw new Error("Missing required fields");
+    }
+
+    try {
+        await db.update(servicePlans)
+            .set({
+                name,
+                categoryId,
+                description,
+                isPopular,
+                order,
+            })
+            .where(eq(servicePlans.id, id));
+    } catch (e: any) {
+        console.error("Failed to update plan:", e);
+        throw new Error("Erro ao atualizar plano: " + e.message);
+    }
+
+    revalidatePath('/admin/service-plans');
+    revalidatePath(`/categoria`);
+    redirect('/admin/service-plans');
+}
