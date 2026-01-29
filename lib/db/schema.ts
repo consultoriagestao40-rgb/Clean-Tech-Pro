@@ -52,3 +52,19 @@ export const rentalPlansRelations = relations(rentalPlans, ({ one }) => ({
         references: [products.id],
     }),
 }));
+
+export const servicePlans = pgTable('service_plans', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: text('name').notNull(), // e.g., 'Ouro', 'Prata'
+    description: text('description').notNull(),
+    categoryId: uuid('category_id').references(() => categories.id, { onDelete: 'cascade' }).notNull(),
+    isPopular: boolean('is_popular').default(false).notNull(),
+    order: integer('order').default(0).notNull(),
+});
+
+export const servicePlansRelations = relations(servicePlans, ({ one }) => ({
+    category: one(categories, {
+        fields: [servicePlans.categoryId],
+        references: [categories.id],
+    }),
+}));

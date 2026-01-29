@@ -47,6 +47,38 @@ export async function GET() {
             `);
         }
 
+        // Create Service Plans Table
+        await db.execute(sql`
+            CREATE TABLE IF NOT EXISTS "service_plans" (
+                "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+                "name" text NOT NULL,
+                "description" text NOT NULL,
+                "category_id" uuid REFERENCES "categories"("id") ON DELETE CASCADE NOT NULL,
+                "is_popular" boolean DEFAULT false NOT NULL,
+                "order" integer DEFAULT 0 NOT NULL
+            );
+        `);
+
+        // Seed default plans for Lavadoras if empty
+        const plansCount = await db.execute(sql`SELECT count(*) from "service_plans"`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((plansCount as any).rows?.[0]?.count === '0' || (plansCount as any)[0]?.count === '0') {
+            // Find Lavadoras category ID
+            const lavadoras = await db.execute(sql`SELECT id FROM categories WHERE slug = 'lavadoras-de-piso' LIMIT 1`);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const lavadorasId = (lavadoras as any).rows?.[0]?.id || (lavadoras as any)[0]?.id;
+
+            if (lavadorasId) {
+                await db.execute(sql`
+                    INSERT INTO "service_plans" ("name", "description", "category_id", "is_popular", "order") VALUES
+                    ('1 - Ouro', 'Incluso: Manutenção, Mão de Obra, Peças, Água Destilada e Deslocamento do técnico autorizado TENNANT COMPANY. Não Incluso: Combustíveis e Químicos.', '${sql.raw(lavadorasId)}', false, 1),
+                    ('2 - Prata', 'Incluso: Igual ao Ouro. Não Incluso: Combustíveis, Químicos, Escovas e Discos.', '${sql.raw(lavadorasId)}', true, 2),
+                    ('3 - Bronze', 'Incluso: Igual ao Ouro. Não Incluso: Combustíveis, Água Destilada, Químicos, Escovas, Discos e Baterias.', '${sql.raw(lavadorasId)}', false, 3),
+                    ('4 - MOB', 'Incluso Somente Manutenção, Mão de Obra, e Deslocamento do técnico autorizado TENNANT COMPANY.', '${sql.raw(lavadorasId)}', false, 4);
+                `);
+            }
+        }
+
         return NextResponse.json({ success: true, message: "Migration executed" });
     } catch (error) {
         return NextResponse.json({ success: false, error: String(error) }, { status: 500 });

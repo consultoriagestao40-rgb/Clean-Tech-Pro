@@ -3,16 +3,22 @@
 import { useState } from 'react';
 import { ProductCard } from "@/components/ui/product-card";
 import { ProductModal } from "@/components/product-modal";
-import type { products, rentalPlans } from '@/lib/db/schema';
+import type { products, rentalPlans, servicePlans } from '@/lib/db/schema';
 
 type Product = typeof products.$inferSelect;
 type RentalPlan = typeof rentalPlans.$inferSelect;
+type ServicePlan = typeof servicePlans.$inferSelect;
 
 interface ProductWithPlans extends Product {
     rentalPlans: RentalPlan[];
 }
 
-export function ProductCatalog({ products }: { products: ProductWithPlans[] }) {
+interface ProductCatalogProps {
+    products: ProductWithPlans[];
+    servicePlans?: ServicePlan[];
+}
+
+export function ProductCatalog({ products, servicePlans = [] }: ProductCatalogProps) {
     const [selectedProduct, setSelectedProduct] = useState<ProductWithPlans | null>(null);
 
     return (
@@ -43,6 +49,7 @@ export function ProductCatalog({ products }: { products: ProductWithPlans[] }) {
             {selectedProduct && (
                 <ProductModal
                     product={selectedProduct}
+                    servicePlans={servicePlans}
                     isOpen={!!selectedProduct}
                     onClose={() => setSelectedProduct(null)}
                 />

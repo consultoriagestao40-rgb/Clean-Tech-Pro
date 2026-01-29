@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, MessageCircle } from 'lucide-react';
-import type { products, rentalPlans } from '@/lib/db/schema';
+import type { products, rentalPlans, servicePlans } from '@/lib/db/schema';
 
 // Types derived from schema
 type Product = typeof products.$inferSelect;
 type RentalPlan = typeof rentalPlans.$inferSelect;
+type ServicePlan = typeof servicePlans.$inferSelect;
 
 interface ProductWithPlans extends Product {
     rentalPlans: RentalPlan[];
@@ -15,11 +16,12 @@ interface ProductWithPlans extends Product {
 
 interface ProductModalProps {
     product: ProductWithPlans;
+    servicePlans?: ServicePlan[];
     isOpen: boolean;
     onClose: () => void;
 }
 
-export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
+export function ProductModal({ product, servicePlans = [], isOpen, onClose }: ProductModalProps) {
     if (!isOpen) return null;
 
     // Sort plans by months (12 -> 60)
@@ -74,8 +76,40 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                             </p>
                         </div>
 
+                        {/* Service Plans Tiers */}
+                        {servicePlans.length > 0 && (
+                            <div className="mb-8">
+                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Escolha seu Nível de Serviço</h3>
+                                <div className="space-y-4">
+                                    {servicePlans.map((plan) => (
+                                        <div
+                                            key={plan.id}
+                                            className={`relative p-4 rounded-xl border-2 transition-all ${plan.isPopular
+                                                    ? 'border-blue-500 bg-blue-50/50 shadow-md ring-1 ring-blue-500/20'
+                                                    : 'border-slate-100 bg-slate-50 hover:border-blue-200'
+                                                }`}
+                                        >
+                                            {plan.isPopular && (
+                                                <span className="absolute -top-3 right-4 bg-blue-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full shadow-sm">
+                                                    Mais Popular
+                                                </span>
+                                            )}
+                                            <div className="flex flex-col">
+                                                <h4 className={`text-base font-bold mb-1 ${plan.isPopular ? 'text-blue-700' : 'text-slate-700'}`}>
+                                                    {plan.name}
+                                                </h4>
+                                                <p className="text-sm text-slate-600">
+                                                    {plan.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Escolha seu Plano de Locação</h3>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Simulação de Locação</h3>
                             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                                 {sortedPlans.map((plan) => (
                                     <div key={plan.id} className="relative border border-gray-200 rounded-lg p-3 hover:border-orange-500 hover:shadow-md transition-all group cursor-default">

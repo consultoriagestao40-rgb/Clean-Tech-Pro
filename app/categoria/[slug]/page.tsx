@@ -1,10 +1,9 @@
 
 import { db } from "@/lib/db";
-import { products, categories } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { products, categories, servicePlans } from "@/lib/db/schema";
+import { eq, asc } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { ProductCatalog } from "@/components/product-catalog";
-import { Hero } from "@/components/ui/hero";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -40,9 +39,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         }
     });
 
+    // Fetch Service Plans for this Category
+    const plans = await db.query.servicePlans.findMany({
+        where: eq(servicePlans.categoryId, category.id),
+        orderBy: [asc(servicePlans.order)]
+    });
+
     return (
         <main className="min-h-screen bg-gray-50 text-slate-900">
-            {/* Reuse Hero or simpler header? User wants "sub pagina". Let's use a simpler header. */}
             <div className="bg-slate-900 py-16">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col sm:block relative">
                     <Link href="/#catalogo" className="self-start mb-4 sm:mb-0 sm:absolute sm:left-6 sm:top-1 text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
@@ -58,7 +62,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <section className="py-12">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     {categoryProducts.length > 0 ? (
-                        <ProductCatalog products={categoryProducts} />
+                        <ProductCatalog products={categoryProducts} servicePlans={plans} />
                     ) : (
                         <div className="text-center py-24 text-gray-500">
                             Nenhum equipamento encontrado nesta categoria.

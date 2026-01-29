@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Package, LayoutDashboard, Settings, LogOut, Grid } from 'lucide-react';
+import { Package, LayoutDashboard, Settings, LogOut, Grid, ListChecks } from 'lucide-react';
 
 export default function AdminLayout({
     children,
@@ -25,6 +25,10 @@ export default function AdminLayout({
                     <Link href="/admin/categories" className="flex items-center gap-3 px-3 py-2 text-gray-700 rounded-md hover:bg-blue-50 hover:text-blue-700 group">
                         <Grid size={20} />
                         <span className="font-medium">Categorias</span>
+                    </Link>
+                    <Link href="/admin/service-plans" className="flex items-center gap-3 px-3 py-2 text-gray-700 rounded-md hover:bg-blue-50 hover:text-blue-700 group">
+                        <ListChecks size={20} />
+                        <span className="font-medium">Planos de Serviço</span>
                     </Link>
                     <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2 text-gray-700 rounded-md hover:bg-blue-50 hover:text-blue-700 group">
                         <Settings size={20} />
