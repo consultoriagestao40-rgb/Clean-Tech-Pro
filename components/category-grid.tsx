@@ -20,12 +20,12 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {categories.map((category) => (
                         <Link key={category.id} href={`/categoria/${category.slug}`} className="group relative block overflow-hidden rounded-lg bg-white shadow-md hover:shadow-xl transition-all duration-300">
-                            <div className="aspect-h-2 aspect-w-3 overflow-hidden bg-gray-200">
+                            <div className="aspect-h-2 aspect-w-3 overflow-hidden bg-white">
                                 {category.imageUrl ? (
                                     <img
                                         src={category.imageUrl}
                                         alt={category.name}
-                                        className="h-48 w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                        className="h-48 w-full object-contain object-center p-2 group-hover:scale-105 transition-transform duration-300"
                                     />
                                 ) : (
                                     <div className="h-48 w-full flex items-center justify-center bg-gray-100 text-gray-400">
