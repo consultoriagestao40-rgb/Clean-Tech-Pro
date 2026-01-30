@@ -12,10 +12,13 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
     return (
         <div className="py-12 bg-gray-50">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <div className="mx-auto max-w-2xl text-center mb-12">
-                    <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-                        Soluções Completas para Limpeza de Pisos. Resultados Excepcionais.
+                <div className="mx-auto max-w-3xl text-center mb-16">
+                    <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl mb-6 leading-tight">
+                        Soluções em <span className="text-blue-600">locação de equipamentos</span>, assistência técnica especializada e suporte completo para o seu negócio.
                     </h2>
+                    <p className="text-lg leading-8 text-gray-600">
+                        Quaisquer que sejam as suas necessidades de limpeza, a <span className="font-semibold text-slate-900">Clean Tech Pro</span> oferece as soluções ideais em <strong>locação de equipamentos profissionais</strong> para tornar sua operação mais eficiente.
+                    </p>
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {categories.map((category) => (
